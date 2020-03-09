@@ -11,7 +11,7 @@ from flask import Flask, jsonify
 
 # Initialize the chrome browser
 # @NOTE: Replace the path with your actual path to the chromedriver
-executable_path = {"executable_path": "C:\Program Files\Chrome\chromedriver"}
+executable_path = {"executable_path": "chrome_driver\chromedriver"}
 browser = Browser("chrome", **executable_path, headless=False)
 
 # This delay varies based on the user's internet speed and how fast the JavaScript loads on the destination page
@@ -149,7 +149,20 @@ def scrape():
         # end if
 
         # Return the template with the teams list passed in
-        return render_template('index.html', news_title=mars_data.news_title, news_p=mars_data.news_p, featured_mars_image=mars_data.featured_mars_image, mars_weather=mars_data.mars_weather, mars_table=mars_data.mars_table)
+        return render_template('index.html', 
+                news_title=mars_data.news_title, 
+                news_p=mars_data.news_p, 
+                featured_mars_image=mars_data.featured_mars_image, 
+                mars_weather=mars_data.mars_weather, 
+                mars_table=mars_data.mars_table,
+                hem1_url=mars_data.hemisphere_image_urls[0].img_url,
+                hem1_name=mars_data.hemisphere_image_urls[0].title,
+                hem1_url=mars_data.hemisphere_image_urls[1].img_url,
+                hem1_name=mars_data.hemisphere_image_urls[1].title,
+                hem1_url=mars_data.hemisphere_image_urls[2].img_url,
+                hem1_name=mars_data.hemisphere_image_urls[2].title,
+                hem1_url=mars_data.hemisphere_image_urls[3].img_url,
+                hem1_name=mars_data.hemisphere_image_urls[3].title)
 
     except Exception as e:
         print(e)
