@@ -7,19 +7,6 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-  <style>
-    /* Remove the navbar's default margin-bottom and rounded borders */ 
-    .navbar {
-      margin-bottom: 0;
-      border-radius: 0;
-    }
-    
-    /* Add a gray background color and some padding to the footer */
-    footer {
-      background-color: #f2f2f2;
-      padding: 25px;
-    }
-  </style>
 </head>
 <body>
 <div class="jumbotron">
@@ -54,5 +41,30 @@
   </div>
 </div>
 
+<div class="container-fluid bg-3 text-center">    
+  <h2>Mars Hemispheres</h2><hr>
+  <div class="row content">
+    <div class="col-sm-6">
+		<img src="{{ hem1_image }}" width="35%" alt="{{ hem1_name }}" /><br>
+		<h3>{{ hem1_name }}</h3>
+    </div>
+    <div class="col-sm-6">
+		<img src="{{ hem2_image }}" width="35%" alt="{{ hem2_name }}" /><br>
+		<h3>{{ hem2_name }}</h3>
+    </div>
+  </div>
+	
+  <div class="row content">
+    <div class="col-sm-6">
+		<img src="{{ hem3_image }}" width="35%" alt="{{ hem3_name }}" /><br>
+		<h3>{{ hem3_name }}</h3>
+    </div>
+    <div class="col-sm-6">
+		<img src="{{ hem4_image }}" width="35%" alt="{{ hem4_name }}" /><br>
+		<h3>{{ hem4_name }}</h3>
+    </div>
+  </div>
+</div>
+	
 </body>
 </html>
