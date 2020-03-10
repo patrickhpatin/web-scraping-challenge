@@ -47,19 +47,6 @@ def clean_text(text_to_clean):
 
 def populate_mars_db():
     try:
-        # Initialize PyMongo to work with MongoDBs
-        conn = 'mongodb://localhost:27017'
-        client = pymongo.MongoClient(conn)
-
-        # Define database and collection
-        db = client.mars_db
-
-        # Refresh database (i.e. drop table/collection)
-        db.mars_data.drop()
-
-        # Re-create the collection
-        mars_collection = db.mars_data
-
         # Nasa News
         soup = init_page("https://mars.nasa.gov/news/")
         news_title = clean_text(soup.find_all("div", class_="content_title")[1].find("a").text)
@@ -104,6 +91,18 @@ def populate_mars_db():
             "hemisphere_image_urls": hemisphere_image_urls,
             "mars_table": mars_table}]
 
+        # Initialize PyMongo to work with MongoDBs
+        conn = 'mongodb://localhost:27017'
+        client = pymongo.MongoClient(conn)
+
+        # Define database and collection
+        db = client.mars_db
+
+        # Refresh database (i.e. drop table/collection)
+        db.mars_data.drop()
+
+        # Re-create the collection
+        mars_collection = db.mars_data
         mars_collection.insert_one(dict_mars)
         
         return 200
@@ -128,17 +127,27 @@ def get_mars_data_from_db():
 #################################################
 app = Flask(__name__)
 
+
+
+@app.route('/')
+def index():
+    return scrape()
+# end def index()
+
 #################################################
 # Flask Routes
 #################################################
 # Display routes
-@app.route('/')
-def index():
+@app.route('/routes')
+def routes():
     """List of all available api routes."""
     return (
         f"Available Routes:<br/>"
+        f"/routes"<br>
         f"/scrape"
     )
+# end def routes()
+
 @app.route("/scrape")
 def scrape():
     try:
