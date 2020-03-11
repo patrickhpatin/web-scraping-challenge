@@ -1,4 +1,3 @@
-
 # Dependencies
 import pandas as pd
 import time as time
@@ -12,7 +11,7 @@ from flask import Flask, jsonify
 # Initialize the chrome browser
 # @NOTE: Replace the path with your actual path to the chromedriver
 executable_path = {"executable_path": "chrome_driver\chromedriver"}
-browser = Browser("chrome", **executable_path, headless=False)
+browser = Browser("chrome", **executable_path, headless=True)
 
 # This delay varies based on the user's internet speed and how fast the JavaScript loads on the destination page
 # 5 seems to work every time.  3 doesn't work at GT consistently.
@@ -20,7 +19,6 @@ sleep_delay = 5
 
 # Function for navigating to a web page (we'll reuse this several times)
 def init_page(url):
-    # url = "https://mars.nasa.gov/news/"
     browser.visit(url)
     time.sleep(sleep_delay)
 
@@ -63,7 +61,14 @@ def populate_mars_db():
 
         # Mars Weather Report
         soup = init_page("https://twitter.com/marswxreport?lang=en")
-        mars_weather = soup.find_all("span", class_="css-901oao css-16my406 r-1qd0xha r-ad9z0x r-bcqeeo r-qvutc0")[27].text
+        for i in range(500):
+            mars_weather = soup.find_all("span", class_="css-901oao css-16my406 r-1qd0xha r-ad9z0x r-bcqeeo r-qvutc0")[i].text
+            if "InSight sol" in mars_weather:
+                # Remove the "\n" characters
+                mars_weather = clean_text(mars_weather)
+                break
+            # end if
+        # end for
 
         # Mars Facts In Table Format
         soup = init_page("https://space-facts.com/mars/")
@@ -84,12 +89,13 @@ def populate_mars_db():
             hemisphere_image_urls.append({"title": title, "img_url": img_url})
 
         # Create a dictionary that contains all of our return values
-        dict_mars = [{
-            "news_title": news_title,
-            "news_p": news_p,
-            "featured_image_url": featured_image_url,
-            "hemisphere_image_urls": hemisphere_image_urls,
-            "mars_table": mars_table}]
+        dict_mars = {
+                    "news_title": news_title,
+                    "news_p": news_p,
+                    "mars_weather": mars_weather,
+                    "featured_image_url": featured_image_url,
+                    "hemisphere_image_urls": hemisphere_image_urls,
+                    "mars_table": mars_table}
 
         # Initialize PyMongo to work with MongoDBs
         conn = 'mongodb://localhost:27017'
@@ -106,6 +112,9 @@ def populate_mars_db():
         mars_collection.insert_one(dict_mars)
         
         return 200
+    except Exception as e:
+        print(e)
+    # end try
 # end def populate_mars_db()
 
 def get_mars_data_from_db():
@@ -115,69 +124,11 @@ def get_mars_data_from_db():
     db = client.mars_db
 
     # Re-create the collection
-    mars_collection = db.mars_data
+    mars_collection = db.mars_data.find()
 
     return mars_collection
 # end def get_mars_data_from_db()
 
 
 
-#################################################
-# Flask Setup
-#################################################
-app = Flask(__name__)
 
-
-
-@app.route('/')
-def index():
-    return scrape()
-# end def index()
-
-#################################################
-# Flask Routes
-#################################################
-# Display routes
-@app.route('/routes')
-def routes():
-    """List of all available api routes."""
-    return (
-        f"Available Routes:<br/>"
-        f"/routes"<br>
-        f"/scrape"
-    )
-# end def routes()
-
-@app.route("/scrape")
-def scrape():
-    try:
-        if populate_mars_db() == 200:
-            mars_data = get_mars_data_from_db()
-        else:
-            print("There was a problem scraping data from NASA. Please try again later.")
-        # end if
-
-        # Return the template with the teams list passed in
-        return render_template('index.html', 
-                news_title=mars_data.news_title, 
-                news_p=mars_data.news_p, 
-                featured_mars_image=mars_data.featured_mars_image, 
-                mars_weather=mars_data.mars_weather, 
-                mars_table=mars_data.mars_table,
-                hem1_url=mars_data.hemisphere_image_urls[0].img_url,
-                hem1_name=mars_data.hemisphere_image_urls[0].title,
-                hem1_url=mars_data.hemisphere_image_urls[1].img_url,
-                hem1_name=mars_data.hemisphere_image_urls[1].title,
-                hem1_url=mars_data.hemisphere_image_urls[2].img_url,
-                hem1_name=mars_data.hemisphere_image_urls[2].title,
-                hem1_url=mars_data.hemisphere_image_urls[3].img_url,
-                hem1_name=mars_data.hemisphere_image_urls[3].title)
-
-    except Exception as e:
-        print(e)
-# end def scrape()
-
-
-
-if __name__ == '__main__':
-    app.run(debug=False)
