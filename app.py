@@ -62,7 +62,8 @@ def index():
                 hem3_name=mars_data[0]["hemisphere_image_urls"][2]["title"],
                 hem3_image=mars_data[0]["hemisphere_image_urls"][2]["img_url"],
                 hem4_name=mars_data[0]["hemisphere_image_urls"][3]["title"],
-                hem4_image=mars_data[0]["hemisphere_image_urls"][3]["img_url"])
+                hem4_image=mars_data[0]["hemisphere_image_urls"][3]["img_url"],
+                background="../Images/Mars.jpg")
     
     except Exception as e:
         print(e)
