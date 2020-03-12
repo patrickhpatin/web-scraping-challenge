@@ -15,7 +15,7 @@ browser = Browser("chrome", **executable_path, headless=True)
 
 # This delay varies based on the user's internet speed and how fast the JavaScript loads on the destination page
 # 5 seems to work every time.  3 doesn't work at GT consistently.
-sleep_delay = 5
+sleep_delay = 3
 
 # Function for navigating to a web page (we'll reuse this several times)
 def init_page(url):
@@ -71,8 +71,13 @@ def populate_mars_db():
         # end for
 
         # Mars Facts In Table Format
-        soup = init_page("https://space-facts.com/mars/")
-        mars_table = soup.find("table", class_="tablepress tablepress-id-p-mars")
+        # soup = init_page("https://space-facts.com/mars/")
+        # mars_table = soup.find("table", class_="tablepress tablepress-id-p-mars")
+        url = "https://space-facts.com/mars/"
+        temp_table = pd.read_html(url)[0]
+        temp_table = temp_table.rename(columns={0: "Description", 1: "Value"})
+        # temp_table.set_index("Description", inplace=True)
+        mars_table = temp_table.to_html()
 
         # Mars Hemisphere Photos
         hemisphere_image_urls = []

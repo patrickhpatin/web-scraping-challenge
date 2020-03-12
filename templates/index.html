@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Bootstrap Example</title>
+  <title>Mars - Scrape On Scrape Off</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
@@ -9,10 +9,11 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 </head>
 <body>
-<div class="jumbotron">
+<div class="jumbotron" style="background-image: url('../Images/Mars.jpg'); color: white;">
   <div class="container text-center">
     <h1>Mission to Mars</h1><br><br>
-	<button type="button" class="btn btn-primary" id='script' name="scriptbutton" value=" Run Script " onclick="exec('python scrape_mars.py');">Scrape New Data</button>
+	<!-- button type="button" class="btn btn-primary" id='script' name="scriptbutton" value=" Run Script " onclick="exec('python scrape_mars.py');">Scrape New Data</button -->
+    <a class="btn btn-primary" href="/scrape">Scrape New Data</a>
   </div>
 </div>
   
@@ -26,7 +27,7 @@
   <div class="row content">
     <div class="col-sm-9">
       <h2>Featured Mars Image</h2>
-      <img src="{{ featured_mars_image}} " width="80%" alt="Featured Mars Image" />
+      <img src="{{ featured_image_url }} " width="80%" alt="Featured Mars Image" />
     </div>
     
     <div class="col-sm-3 border">
@@ -36,7 +37,7 @@
 	
     <div class="col-sm-3">
       <h3>Mars Facts</h3>
-      {{ mars_table }}
+      {{ mars_table|safe }}
     </div>
   </div>
 </div>
@@ -45,22 +46,22 @@
   <h2>Mars Hemispheres</h2><hr>
   <div class="row content">
     <div class="col-sm-6">
-		<img src="{{ hem1_image }}" width="35%" alt="{{ hem1_name }}" /><br>
+		<img src="{{ hem1_image }}" width="50%" alt="{{ hem1_name }}" /><br>
 		<h3>{{ hem1_name }}</h3>
     </div>
     <div class="col-sm-6">
-		<img src="{{ hem2_image }}" width="35%" alt="{{ hem2_name }}" /><br>
+		<img src="{{ hem2_image }}" width="50%" alt="{{ hem2_name }}" /><br>
 		<h3>{{ hem2_name }}</h3>
     </div>
   </div>
 	
   <div class="row content">
     <div class="col-sm-6">
-		<img src="{{ hem3_image }}" width="35%" alt="{{ hem3_name }}" /><br>
+		<img src="{{ hem3_image }}" width="50%" alt="{{ hem3_name }}" /><br>
 		<h3>{{ hem3_name }}</h3>
     </div>
     <div class="col-sm-6">
-		<img src="{{ hem4_image }}" width="35%" alt="{{ hem4_name }}" /><br>
+		<img src="{{ hem4_image }}" width="50%" alt="{{ hem4_name }}" /><br>
 		<h3>{{ hem4_name }}</h3>
     </div>
   </div>
