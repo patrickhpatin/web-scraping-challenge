@@ -1,4 +1,4 @@
-# web-scrapting-challenge
+# web-scraping-challenge
 Web Scraping Homework
 
 If the scrape fails, you may need to adjust the sleep_delay variable on line 18 of scrape_mars.py.
